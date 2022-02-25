@@ -101,10 +101,16 @@ public class Profesor {
 		return nombre;
 	}
 	
+//Método que devuelve un profesor ficticio ante un correo dado
+	public static Profesor getProfesorFicticio (String correo) {
+		Profesor profesor=new Profesor("Pepe",correo);
+		return new Profesor(profesor);
+	}
+	
 //	Equals y hashCode
 	@Override
 	public int hashCode() {
-		return Objects.hash(nombre);
+		return Objects.hash(correo);
 	}
 
 	@Override
@@ -116,15 +122,17 @@ public class Profesor {
 		if (getClass() != obj.getClass())
 			return false;
 		Profesor other = (Profesor) obj;
-		return Objects.equals(nombre, other.nombre);
+		return Objects.equals(correo, other.correo);
 	}
-
+	
 	@Override
 	public String toString() {
 		if (telefono != null) {
-			return "nombre=" + nombre + ", correo=" + correo + ", telefono=" + telefono;
+			return "nombre=" + nombre + ", correo=" + correo + ", teléfono=" + telefono;
 		}
 		return "nombre=" + nombre + ", correo=" + correo;
 	}
+
+
 
 }

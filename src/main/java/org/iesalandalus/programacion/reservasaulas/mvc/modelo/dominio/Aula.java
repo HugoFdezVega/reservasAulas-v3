@@ -48,6 +48,12 @@ public class Aula {
 		setPuestos(a.getPuestos());
 	}
 	
+	public float getPuntos() {
+		float puntos=getPuestos()*PUNTOS_POR_PUESTO;
+		return puntos;
+	}
+
+//Método que devuelve un aula ficticia ante un nombre dado
 	public static Aula getAulaFicticia (String nombre) {
 		Aula aula=new Aula (nombre,10);
 		return new Aula(aula);
