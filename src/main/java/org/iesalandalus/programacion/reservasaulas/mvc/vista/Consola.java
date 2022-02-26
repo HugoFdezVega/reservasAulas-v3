@@ -84,6 +84,14 @@ public class Consola {
 		String nombreProfesor = Entrada.cadena();
 		return nombreProfesor;
 	}
+	
+	//Método que pide el correo de un profesor y crea un profesor ficticio con dicho correo
+	public static Profesor leerProfesorFicticio() {
+		System.out.println("Introduzca el correo del profesor");
+		String correoProfesor = Entrada.cadena();
+		Profesor profesor=new Profesor ("pepe",correoProfesor,"600121212");
+		return new Profesor(profesor);
+	}
 
 //Método que pide que se elija un tramo de entre los posibles tramos, que se muestran mediante un forEach y el .toString del enum Tramo. Luego compara,
 //ignorando mayúsculas, si el tramo introducido coincide con alguno de los del array de tramos. Si es así, devuelve el Tramo correspondiente, y si no
