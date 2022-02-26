@@ -10,6 +10,7 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Permanenci
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.PermanenciaPorHora;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.PermanenciaPorTramo;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Tramo;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
@@ -195,7 +196,11 @@ public class Consola {
 		}
 	}
 
-	
+	//Método que crea una reserva a partir de un profesor ficticio, un aula ficticia y una permanencia dada
+	public static Reserva leerReserva() {
+		Reserva reservaFinal=new Reserva(leerProfesorFicticio(),leerAulaFicticia(),leerPermanencia());
+		return reservaFinal;
+	}
 	
 	
 	
