@@ -246,7 +246,7 @@ public class Vista {
 		List<String> listaReservas = null;
 		try {
 			listaReservas = controlador.representarReservas();
-		} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
+		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
 		if (listaReservas == null) {
@@ -290,31 +290,6 @@ public class Vista {
 			System.out.println(ERROR);
 		} else {
 			Iterator<Reserva> iterador = listaReservasProfesor.iterator();
-			while (iterador.hasNext()) {
-				System.out.println(iterador.next().toString());
-			}
-		}
-	}
-
-//Método similar a listaReservas pero solo para un parámetro dado. En este caso, tendremos que pedir el día y el tramo para crear una Permanencia que
-//pasar como parámetro al método del controlador.
-	public void listarReservasPermanencia() {
-		List<Reserva> listaReservasPermanencia = null;
-		Permanencia permanencia = null;
-		Tramo tramo = null;
-		LocalDate dia = null;
-		try {
-			tramo = Consola.leerTramo();
-			dia = Consola.leerDia();
-			permanencia = new Permanencia(dia, tramo);
-			listaReservasPermanencia = controlador.getReservasPermanencia(permanencia);
-		} catch (NullPointerException | IllegalArgumentException e) {
-			System.out.println(e.getMessage());
-		}
-		if (listaReservasPermanencia == null) {
-			System.out.println(ERROR);
-		} else {
-			Iterator<Reserva> iterador = listaReservasPermanencia.iterator();
 			while (iterador.hasNext()) {
 				System.out.println(iterador.next().toString());
 			}
