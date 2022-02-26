@@ -70,7 +70,20 @@ public class PermanenciaPorHora extends Permanencia {
 		return "día=" + getDia().format(FORMATO_DIA) + ", hora=" + hora.format(FORMATO_HORA);
 	}
 
-	
+
+//    public int compareTo(Permanencia o) 
+//    {
+//        int resultado=0;
+//
+//        if (this.getDia().isAfter(o.getDia())) 
+//        	resultado = -1;
+//        else if (this.getDia().isBefore(o.getDia()))
+//        	resultado = 1;
+//        else 
+//        	resultado = 0;
+//        
+//        return resultado;
+//    }
 	
 	
 	

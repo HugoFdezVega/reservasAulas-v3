@@ -103,7 +103,7 @@ public class Profesor {
 	
 //Método que devuelve un profesor ficticio ante un correo dado
 	public static Profesor getProfesorFicticio (String correo) {
-		Profesor profesor=new Profesor("Pepe",correo);
+		Profesor profesor=new Profesor("Pepe",correo,"600121212");
 		return new Profesor(profesor);
 	}
 	
