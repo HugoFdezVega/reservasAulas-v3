@@ -203,55 +203,21 @@ public class Vista {
 	public void realizarReserva() {
 		Reserva reservaARealizar = null;
 		try {
-			String nombreProfesor = Consola.leerNombreProfesor();
-			Profesor profesor = new Profesor(nombreProfesor, CORREO_VALIDO);
-			if (controlador.buscarProfesor(profesor) == null) {
-				System.out.println(
-						"ERROR: El profesor introducido no existe. Por favor, creélo antes de intentar realizar una reserva con él.");
-			} else {
-				reservaARealizar = leerReserva(controlador.buscarProfesor(profesor));
-				if(reservaARealizar==null) {
-					System.out.println("ERROR: La fecha introducida debe ser posterior a la presente");
-				}
-				else if (controlador.buscarAula(reservaARealizar.getAula()) == null) {
-					System.out.println(
-							"ERROR: El aula introducida no existe. Por favor, creéla antes de intentar realizar una reserva con ella.");
-				} else {
-					controlador.realizarReserva(reservaARealizar);
-					System.out.println("Reserva realizada correctamente.");
-				}
+			reservaARealizar = Consola.leerReserva();
+			if (controlador.buscarProfesor(reservaARealizar.getProfesor()) == null) {
+				System.out.println("ERROR: El profesor introducido no existe. Por favor, creélo antes de intentar realizar una reserva con él.");
+			} 
+			else if (controlador.buscarAula(reservaARealizar.getAula()) == null) {
+				System.out.println("ERROR: El aula introducida no existe. Por favor, creéla antes de intentar realizar una reserva con ella.");
+			} 
+			else {
+				controlador.realizarReserva(reservaARealizar);
+				System.out.println("Reserva realizada correctamente.");
+
 			}
 		} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-//Método que nos va a crear una Reserva para que la utilicemos. Para ello, recibe un Profesor como parámetro y luego va pidiendo los distintos atributos
-//que conforman una Reserva mediante sus métodos de Consola. Una vez tiene los datos, crea la Permanencia y la pasa como parámetro junto con los demás
-//atributos para crear la Reserva. Captura los errores y continúa en el bucle hasta que no existan y por último retorna una copia de la Reserva
-	private Reserva leerReserva(Profesor profesor) {
-
-		Reserva reserva = null;
-		Aula aula = null;
-		Tramo tramo = null;
-		LocalDate dia = null;
-		Permanencia permanencia = null;
-		try {
-			aula = Consola.leerAula();
-			tramo = Consola.leerTramo();
-			dia = Consola.leerDia();
-			permanencia = new Permanencia(dia, tramo);
-			reserva = new Reserva(profesor, aula, permanencia);
-		} catch (NullPointerException | IllegalArgumentException e) {
-			System.out.println(e.getMessage());
-		}
-		if(dia.isBefore(LocalDate.now())) {
-			reserva=null;
-		}
-		else {
-			reserva=new Reserva(reserva);
-		}
-		return reserva;
 	}
 
 //Método que también hace uso del leerReserva anterior para generar una reserva que pasaremos como parámetro al método homónimo del controlador. Dado que
@@ -259,15 +225,13 @@ public class Vista {
 //parámetros y con los atributos estáticos de la clase Vista. Capturamos los errores y continuamos dentro del bucle hasta que no existen y finalmente
 //devolvemos un mensaje de realización correcta.
 	public void anularReserva() {
-
 		Reserva reserva = null;
-		Profesor profesor = new Profesor(NOMBRE_VALIDO, CORREO_VALIDO);
 		List<String> listaReservas = controlador.representarReservas();
 		if (listaReservas == null) {
 			System.out.println("No existen reservas que borrar");
 		} else {
 			try {
-				reserva = leerReserva(profesor);
+				reserva = Consola.leerReservaFicticia();
 				controlador.anularReserva(reserva);
 				System.out.println("Reserva anulada correctamente.");
 			} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
@@ -282,7 +246,7 @@ public class Vista {
 		List<String> listaReservas = null;
 		try {
 			listaReservas = controlador.representarReservas();
-		} catch (NullPointerException | IllegalArgumentException e) {
+		} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 			System.out.println(e.getMessage());
 		}
 		if (listaReservas == null) {

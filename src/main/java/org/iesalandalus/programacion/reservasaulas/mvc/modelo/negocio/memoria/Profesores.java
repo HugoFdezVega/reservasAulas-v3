@@ -64,7 +64,7 @@ public class Profesores implements IProfesores {
 		} else if (buscar(profesor) == null) {
 			coleccionProfesores.add(new Profesor(profesor));
 		} else {
-			throw new OperationNotSupportedException("ERROR: Ya existe un profesor con ese nombre.");
+			throw new OperationNotSupportedException("ERROR: Ya existe un profesor con ese correo.");
 		}
 	}
 
@@ -92,7 +92,7 @@ public class Profesores implements IProfesores {
 		if (profesor == null) {
 			throw new NullPointerException("ERROR: No se puede borrar un profesor nulo.");
 		} else if (buscar(profesor) == null) {
-			throw new OperationNotSupportedException("ERROR: No existe ningún profesor con ese nombre.");
+			throw new OperationNotSupportedException("ERROR: No existe ningún profesor con ese correo.");
 		} else {
 			coleccionProfesores.remove(coleccionProfesores.indexOf(profesor));
 		}

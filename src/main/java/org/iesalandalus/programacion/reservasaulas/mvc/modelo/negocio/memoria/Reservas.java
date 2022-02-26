@@ -231,10 +231,8 @@ public class Reservas implements IReservas {
 		return reservasMes;
 	}
 
-	// Método que recibe un Aula y un LocalDate como parámetros. Valida null y luego
-	// crea un iterador que guarda en una variable auxiliar la reserva que
-	// está iterando. Si el aula y la fecha del auxiliar, extraídos con los métodos
-	// adecuados, coinciden con las de los parámetros, hace una copia del
+	// Método que recibe un Aula y un LocalDate como parámetros. Valida null y luego crea un iterador que guarda en una variable auxiliar la reserva que
+	// está iterando. Si el aula y la fecha del auxiliar, extraídos con los métodos adecuados, coinciden con las de los parámetros, hace una copia del
 	// auxiliar y lo retorna. Si no, retorna null
 	@Override
 	public Reserva getReservaAulaDia(Aula aula, LocalDate fecha) {
@@ -257,10 +255,8 @@ public class Reservas implements IReservas {
 		return reserva.getPuntos();
 	}
 
-	// Método insertar, que a un Aula dada comprueba si es nullo y si no, recorre
-	// coleccionAulas buscando alguna coincidencia. De haberla, nos
-	// retorna una excepción avisándonos del aula duplicada y si no, inserta una
-	// copia del Aula pasada como parámetro
+	// Método insertar, que a un Aula dada comprueba si es nullo y si no, recorre coleccionAulas buscando alguna coincidencia. De haberla, nos
+	// retorna una excepción avisándonos del aula duplicada y si no, inserta una copia del Aula pasada como parámetro
 	@Override
 	public void insertar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
