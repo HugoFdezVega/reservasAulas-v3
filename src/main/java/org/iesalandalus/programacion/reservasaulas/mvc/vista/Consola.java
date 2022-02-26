@@ -139,5 +139,17 @@ public class Consola {
 		} while (problema == true);
 		return fechaFinal;
 	}
+	
+	//Método que pide al usuario que elija un tipo de permanencia
+	public static int elegirPermanencia() {
+		int permanenciaElegida=0;
+		do {
+			System.out.println("Elija cómo quiere hacer la reserva:");
+			System.out.println("1- Reserva por tramo (mañana o tarde)");
+			System.out.println("2- Reserva por horas");
+			permanenciaElegida=Entrada.entero();
+		} while (permanenciaElegida<1||permanenciaElegida>2);
+		return permanenciaElegida;
+	}
 
 }
