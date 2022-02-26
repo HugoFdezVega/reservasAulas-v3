@@ -199,10 +199,14 @@ public class Consola {
 	//Método que crea una reserva a partir de un profesor ficticio, un aula ficticia y una permanencia dada
 	public static Reserva leerReserva() {
 		Reserva reservaFinal=new Reserva(leerProfesorFicticio(),leerAulaFicticia(),leerPermanencia());
-		return reservaFinal;
+		return new Reserva (reservaFinal);
 	}
 	
-	
+	public static Reserva leerReservaFicticia() {
+		Profesor profesor=new Profesor ("pepe", "pepe@gmail.com", "600121212");
+		Reserva reservaFinal=new Reserva (profesor,leerAulaFicticia(),leerPermanencia());
+		return new Reserva (reservaFinal);
+	}
 	
 	
 	
