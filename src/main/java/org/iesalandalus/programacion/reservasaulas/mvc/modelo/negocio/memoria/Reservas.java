@@ -263,52 +263,6 @@ public class Reservas implements IReservas {
 	// copia del Aula pasada como parámetro
 	@Override
 	public void insertar(Reserva reserva) throws OperationNotSupportedException {
-//		if (reserva == null) {
-//			throw new NullPointerException("ERROR: No se puede realizar una reserva nula.");
-//		} else {
-//			boolean problema = false;
-//			Reserva reservaDia = getReservaAulaDia(reserva.getAula(), reserva.getPermanencia().getDia());
-//			List<Reserva> reservasProfesor = getReservasProfesorMes(reserva.getProfesor(),
-//					reserva.getPermanencia().getDia());
-//			float puntosGastados = 0;
-//			for (Reserva r : reservasProfesor) {
-//				puntosGastados = puntosGastados + r.getPuntos();
-//			}
-//			if (!esMesSiguienteOPosterior(reserva)) {
-//				problema = true;
-//				throw new OperationNotSupportedException(
-//						"ERROR: Sólo se pueden hacer reservas para el mes que viene o posteriores.");
-//			} else if (puntosGastados + getPuntosGastadosReserva(reserva) > MAX_PUNTOS_PROFESOR_MES) {
-//				problema = true;
-//				throw new OperationNotSupportedException(
-//						"ERROR: Esta reserva excede los puntos máximos por mes para dicho profesor.");
-//			} 
-		// else if (buscar(reserva) == null) {
-//				if (reservaDia != null) {
-//					Permanencia permanenciaReservaDia = reservaDia.getPermanencia();
-//					Permanencia permanenciaReserva = reserva.getPermanencia();
-//					if (permanenciaReservaDia instanceof PermanenciaPorTramo) {
-//						if (permanenciaReserva instanceof PermanenciaPorHora) {
-//							problema = true;
-//							throw new OperationNotSupportedException(
-//									"ERROR: Ya se ha realizado una reserva de otro tipo de permanencia para este día.");
-//						}
-//					} else if (permanenciaReservaDia instanceof PermanenciaPorHora) {
-//						if (permanenciaReserva instanceof PermanenciaPorTramo) {
-//							problema = true;
-//							throw new OperationNotSupportedException(
-//									"ERROR: Ya se ha realizado una reserva de otro tipo de permanencia para este día.");
-//						}
-//					}
-//				}
-//			}
-//			if (problema == false) {
-//				coleccionReservas.add(new Reserva(reserva));
-//			} else {
-//				throw new OperationNotSupportedException("ERROR: La reserva ya existe.");
-//			}
-//		}
-
 		if (reserva == null) {
 			throw new NullPointerException("ERROR: No se puede insertar una reserva nula.");
 		}

@@ -1,10 +1,14 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.vista;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.PermanenciaPorHora;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.PermanenciaPorTramo;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Tramo;
 import org.iesalandalus.programacion.utilidades.Entrada;
@@ -20,7 +24,8 @@ public class Consola {
 
 //Método que recorre el array de opciones y las va mostrando con el toString de Opcion
 	public static void mostrarMenu() {
-		mostrarCabecera("Bienvenido al sistema de reservas del IES Al-Ándalus. Entra libremente y deja parte de la felicidad que traes contigo.");
+		mostrarCabecera(
+				"Bienvenido al sistema de reservas del IES Al-Ándalus. Entra libremente y deja parte de la felicidad que traes contigo.");
 		for (Opcion o : opciones) {
 			System.out.println(o);
 		}
@@ -28,9 +33,9 @@ public class Consola {
 
 //Muestra un mensaje de cabecera
 	public static void mostrarCabecera(String cabecera) {
-		LocalDate presente=LocalDate.now();
-		String salida=" Hoy es "+presente.format(FORMATO_DIA).toString();
-		System.out.println(cabecera+salida);
+		LocalDate presente = LocalDate.now();
+		String salida = " Hoy es " + presente.format(FORMATO_DIA).toString();
+		System.out.println(cabecera + salida);
 	}
 
 //Método que pide que se elija una opción y la devuelve. Se validará después con el método esOrdinalValido del método getOpcionSegunOrdinal de Opcion
@@ -42,7 +47,7 @@ public class Consola {
 
 //Método que ejecuta leerNombreAula() y leerNumeroPuestos(). Luego crea un aula con dichos parámetros y retorna una copia
 	public static Aula leerAula() {
-		Aula aula = new Aula(leerNombreAula(),leerNumeroPuestos());
+		Aula aula = new Aula(leerNombreAula(), leerNumeroPuestos());
 		return new Aula(aula);
 	}
 
@@ -52,17 +57,18 @@ public class Consola {
 		String nombreAula = Entrada.cadena();
 		return nombreAula;
 	}
-	
-	//Método que pide un número de puestos para el aula y lo devuelve
+
+	// Método que pide un número de puestos para el aula y lo devuelve
 	public static int leerNumeroPuestos() {
 		System.out.println("Introduzca el número de puestos del aula");
-		int puestosAula=Entrada.entero();
+		int puestosAula = Entrada.entero();
 		return puestosAula;
 	}
-	
-	//Método que pide un nombre para el aula y crea un aula ficticia con dicho nombre
+
+	// Método que pide un nombre para el aula y crea un aula ficticia con dicho
+	// nombre
 	public static Aula leerAulaFicticia() {
-		Aula aula = new Aula(leerNombreAula(),20);
+		Aula aula = new Aula(leerNombreAula(), 20);
 		return new Aula(aula);
 	}
 
@@ -84,12 +90,13 @@ public class Consola {
 		String nombreProfesor = Entrada.cadena();
 		return nombreProfesor;
 	}
-	
-	//Método que pide el correo de un profesor y crea un profesor ficticio con dicho correo
+
+	// Método que pide el correo de un profesor y crea un profesor ficticio con
+	// dicho correo
 	public static Profesor leerProfesorFicticio() {
 		System.out.println("Introduzca el correo del profesor");
 		String correoProfesor = Entrada.cadena();
-		Profesor profesor=new Profesor ("pepe",correoProfesor,"600121212");
+		Profesor profesor = new Profesor("pepe", correoProfesor, "600121212");
 		return new Profesor(profesor);
 	}
 
@@ -107,13 +114,13 @@ public class Consola {
 			String tramoElegido = Entrada.cadena();
 			if (tramoElegido.equalsIgnoreCase(tramos[0].toString())) {
 				tramoFinal = Tramo.MANANA;
-				problema=false;
+				problema = false;
 			} else if (tramoElegido.equalsIgnoreCase(tramos[1].toString())) {
 				tramoFinal = Tramo.TARDE;
-				problema=false;
+				problema = false;
 			} else {
 				System.out.println("ERROR: El tramo introducido no es válido");
-				problema=true;
+				problema = true;
 			}
 		} while (problema == true);
 		return tramoFinal;
@@ -139,17 +146,70 @@ public class Consola {
 		} while (problema == true);
 		return fechaFinal;
 	}
-	
-	//Método que pide al usuario que elija un tipo de permanencia
+
+	//Método que pide una hora mientras no se introduzca en el formato correcto y después la devuelve
+	private static LocalTime leerHora() {
+		LocalTime horaFinal = null;
+		boolean problema = false;
+		do {
+			try {
+				System.out.println("Por favor, introduzca la hora de su reserva (formato hh:00)");
+				String horaIntroducida = Entrada.cadena();
+				horaFinal = LocalTime.parse(horaIntroducida);
+				problema = false;
+			} catch (DateTimeParseException e) {
+				System.out.println("ERROR: Formato incorrecto");
+				problema = true;
+			}
+		} while (problema == true);
+		return horaFinal;
+	}
+
+	// Método que pide al usuario que elija un tipo de permanencia
 	public static int elegirPermanencia() {
-		int permanenciaElegida=0;
+		int permanenciaElegida = 0;
 		do {
 			System.out.println("Elija cómo quiere hacer la reserva:");
 			System.out.println("1- Reserva por tramo (mañana o tarde)");
 			System.out.println("2- Reserva por horas");
-			permanenciaElegida=Entrada.entero();
-		} while (permanenciaElegida<1||permanenciaElegida>2);
+			permanenciaElegida = Entrada.entero();
+		} while (permanenciaElegida < 1 || permanenciaElegida > 2);
 		return permanenciaElegida;
 	}
 
+	//Método que se apoya en elegirPermanencia() para, una vez elegido el tipo, pedir los datos para crear una permanencia de un tipo u otro
+	//y devolver una copia
+	public static Permanencia leerPermanencia() {
+		Permanencia permanenciaFinal=null;
+		int permanenciaElegida = elegirPermanencia();
+		if(permanenciaElegida==1) {
+			permanenciaFinal=new PermanenciaPorTramo(leerDia(),leerTramo());
+		}
+		else {
+			permanenciaFinal=new PermanenciaPorHora(leerDia(),leerHora());
+		}
+		if (permanenciaFinal instanceof PermanenciaPorTramo)
+			return new PermanenciaPorTramo((PermanenciaPorTramo) permanenciaFinal);
+		else {
+			return new PermanenciaPorHora((PermanenciaPorHora) permanenciaFinal);
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
