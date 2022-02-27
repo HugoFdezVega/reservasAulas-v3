@@ -13,7 +13,7 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Tramo;
 
-public class Vista {
+public class Vista implements IVista {
 	Controlador controlador;
 
 	private final static String ERROR = "No existen reservas para el parámetro proporcionado";
@@ -27,12 +27,14 @@ public class Vista {
 	}
 
 //Método que setea el controlador una vez se instancie
+	@Override
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
 	}
 
 //Método comenzar, que muestra el menú, nos da a elegir una opción, pasa dicha opción por el método getOpcionSegunOrdinal para validar que el ordenal
 //sea correcto, lo transforma en una Opcion y luego la ejecuta. Todo ello se repetirá mientras la Opcion elegida no sea SALIR
+	@Override
 	public void comenzar() {
 		int ordinalOpcion = 0;
 		do {
@@ -48,6 +50,7 @@ public class Vista {
 	}
 
 //Método que llama al método terminar del controlador y da un mensaje de despedida
+	@Override
 	public void salir() {
 		System.out.println("¡Hasta otra!");
 		controlador.terminar();
@@ -301,14 +304,10 @@ public class Vista {
 	public void consultarDisponibilidad() {
 		boolean disponible = true;
 		Permanencia permanencia = null;
-		Tramo tramo = null;
-		LocalDate dia = null;
 		Aula aula = null;
 		try {
-			tramo = Consola.leerTramo();
-			dia = Consola.leerDia();
-			permanencia = new Permanencia(dia, tramo);
-			aula = Consola.leerAula();
+			permanencia = Consola.leerPermanencia();
+			aula = Consola.leerAulaFicticia();
 			disponible = controlador.consultarDisponibilidad(aula, permanencia);
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());

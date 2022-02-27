@@ -95,7 +95,7 @@ public class Reservas implements IReservas {
 	@Override
 	public void borrar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
-			throw new NullPointerException("ERROR: No se puede anular una reserva nula.");
+			throw new NullPointerException("ERROR: No se puede borrar una reserva nula.");
 		} 
 		else if (!esMesSiguienteOPosterior(reserva)) {
 			throw new OperationNotSupportedException("ERROR: Sólo se pueden anular reservas para el mes que viene o posteriores.");
