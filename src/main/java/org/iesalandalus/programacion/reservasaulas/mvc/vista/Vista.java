@@ -243,7 +243,9 @@ public class Vista implements IVista {
 	}
 
 //Método que crea un array String y ejecuta el método homónimo del controlador. Captura todos los errores posibles y los muestra de existir. Si el retorno es
-//nulo (no existe), muestra un mensaje en consecuencia. Si no, recorre el array mostrando los resultados con el .toString de la clase
+//nulo (no existe), muestra un mensaje en consecuencia. Si no, recorre el array mostrando los resultados con el .toString de la clase. Al haber desaparecido
+//el método listarReservasPermanencia() y apuntarse a que ese resultado se podía obtener en este método, se ha modificado para que a una fecha dada nos dé la
+//lista de todas las reservas para dicha fecha. El método anterior ha quedado comentado.
 	public void listarReservas() {
 //		List<String> listaReservas = null;
 //		try {
@@ -275,16 +277,6 @@ public class Vista implements IVista {
 				System.out.println(iterador.next().toString());
 			}
 		}
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 
 //Método similar a listaReservas pero solo para un parámetro dado, que obtendremos mediante el método adecuado de la consola
