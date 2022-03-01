@@ -100,7 +100,7 @@ public class Reserva {
 //	Método toString
 	@Override
 	public String toString() {
-		return "Profesor=" + profesor.toString() + ", aula=" + aula.toString() + ", permanencia=" + permanencia.toString();
+		return profesor.toString() + ", " + aula.toString() + ", " + permanencia.toString() + ", " + String.format("puntos=%.1f",getPuntos());
 	}
 	
 	

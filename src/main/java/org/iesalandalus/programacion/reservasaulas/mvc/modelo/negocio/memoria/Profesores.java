@@ -1,11 +1,14 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesores;
 
@@ -42,6 +45,10 @@ public class Profesores implements IProfesores {
 //	Método que crea una copia profunda del arraylist y lo devuelve para así evitar aliasing.
 	private List<Profesor> copiaProfundaProfesores(List<Profesor> listaProfesores) {
 		List<Profesor> copiaProfunda = new ArrayList<>();
+		
+		Comparator<Profesor> comparador=Comparator.comparing(Profesor::getCorreo);
+		Collections.sort(coleccionProfesores, comparador);
+		
 		Iterator<Profesor> iterador = listaProfesores.iterator();
 		while (iterador.hasNext()) {
 			copiaProfunda.add(new Profesor(iterador.next()));

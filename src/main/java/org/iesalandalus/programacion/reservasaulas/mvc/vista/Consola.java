@@ -109,14 +109,13 @@ public class Consola {
 		boolean problema = false;
 		do {
 			System.out.println("Elija un tramo horario:");
-			for (Tramo t : tramos) {
-				System.out.println(t.toString());
-			}
-			String tramoElegido = Entrada.cadena();
-			if (tramoElegido.equalsIgnoreCase(tramos[0].toString())) {
+			System.out.println("1- Mañana");
+			System.out.println("2- Tarde");
+			int tramoElegido = Entrada.entero();
+			if (tramoElegido==1) {
 				tramoFinal = Tramo.MANANA;
 				problema = false;
-			} else if (tramoElegido.equalsIgnoreCase(tramos[1].toString())) {
+			} else if (tramoElegido==2) {
 				tramoFinal = Tramo.TARDE;
 				problema = false;
 			} else {
@@ -154,7 +153,7 @@ public class Consola {
 		boolean problema = false;
 		do {
 			try {
-				System.out.println("Por favor, introduzca la hora de su reserva (formato hh:00)");
+				System.out.println("Introduzca una hora (formato hh:00)");
 				String horaIntroducida = Entrada.cadena();
 				horaFinal = LocalTime.parse(horaIntroducida);
 				problema = false;
@@ -170,9 +169,9 @@ public class Consola {
 	public static int elegirPermanencia() {
 		int permanenciaElegida = 0;
 		do {
-			System.out.println("Elija cómo quiere hacer la reserva:");
-			System.out.println("1- Reserva por tramo (mañana o tarde)");
-			System.out.println("2- Reserva por horas");
+			System.out.println("Seleccione una permanencia:");
+			System.out.println("1- Por tramo (mañana o tarde)");
+			System.out.println("2- Por horas");
 			permanenciaElegida = Entrada.entero();
 		} while (permanenciaElegida < 1 || permanenciaElegida > 2);
 		return permanenciaElegida;

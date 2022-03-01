@@ -11,9 +11,9 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.vista.IVista;
 
-public class Controlador {
-	IModelo modelo;
-	IVista vista;
+public class Controlador implements IControlador {
+	IModelo Imodelo;
+	IVista Ivista;
 	
 //Constructor del controlador, que toma como parámetros el Modelo y la Vista, comprueba nulos, y luego se asigna a sí mismo a la Vista
 //para que ésta sepa quién es el Controlador.
@@ -25,17 +25,19 @@ public class Controlador {
 		if (vista == null) {
 			throw new IllegalArgumentException("ERROR: La vista no puede ser nula.");
 		}
-		this.modelo = modelo;
-		this.vista = vista;
-		this.vista.setControlador(this);
+		this.Imodelo = modelo;
+		this.Ivista = vista;
+		this.Ivista.setControlador(this);
 	}
 	
 //Método comenzar, que corre el método homónimo de la Vista
+	@Override
 	public void comenzar() {
-		vista.comenzar();
+		Ivista.comenzar();
 	}
 	
 //Método terminar, que simplemente corre el método exit y cierra la ejecución
+	@Override
 	public void terminar() {
 		System.exit(0);
 	}
@@ -43,72 +45,87 @@ public class Controlador {
 //Los siguientes métodos simplemente corren los métodos homónimos del modelo, recogen los parámetros que se les pasa desde la Vista
 //(que es desde donde estos métodos serán llamados) y le devuelve a la Vista los datos que retorna el modelo. También propaga las 
 //excepciones para que sean tratadas más arriba
+	@Override
 	public void insertarAula(Aula aula) throws OperationNotSupportedException {
-		modelo.insertarAula(aula);
+		Imodelo.insertarAula(aula);
 	}
 	
+	@Override
 	public void insertarProfesor(Profesor profesor) throws OperationNotSupportedException {
-		modelo.insertarProfesor(profesor);
+		Imodelo.insertarProfesor(profesor);
 	}
 	
+	@Override
 	public void borrarAula(Aula aula) throws OperationNotSupportedException {
-		modelo.borrarAula(aula);
+		Imodelo.borrarAula(aula);
 	}
 	
+	@Override
 	public void borrarProfesor(Profesor profesor) throws OperationNotSupportedException {
-		modelo.borrarProfesor(profesor);
+		Imodelo.borrarProfesor(profesor);
 	}
 	
+	@Override
 	public Aula buscarAula(Aula aula) {
-		Aula aulaBuscada=modelo.buscarAula(aula);
+		Aula aulaBuscada=Imodelo.buscarAula(aula);
 		return aulaBuscada;
 	}
 	
+	@Override
 	public Profesor buscarProfesor(Profesor profesor) {
-		Profesor profesorBuscado=modelo.buscarProfesor(profesor);
+		Profesor profesorBuscado=Imodelo.buscarProfesor(profesor);
 		return profesorBuscado;
 	}
 	
+	@Override
 	public List<String> representarAulas() {
-		List<String> listaAulas=modelo.representarAulas();
+		List<String> listaAulas=Imodelo.representarAulas();
 		return listaAulas;
 	}
 	
+	@Override
 	public List<String> representarProfesores() {
-		List<String> listaProfesores=modelo.representarProfesores();
+		List<String> listaProfesores=Imodelo.representarProfesores();
 		return listaProfesores;
 	}
 	
+	@Override
 	public List<String> representarReservas() {
-		List<String> listaReservas=modelo.representarReservas();
+		List<String> listaReservas=Imodelo.representarReservas();
 		return listaReservas;
 	}
 	
+	@Override
 	public void realizarReserva(Reserva reserva) throws OperationNotSupportedException {
-		modelo.realizarReserva(reserva);
+		Imodelo.realizarReserva(reserva);
 	}
 	
+	@Override
 	public void anularReserva(Reserva reserva) throws OperationNotSupportedException {
-		modelo.anularReserva(reserva);
+		Imodelo.anularReserva(reserva);
 	}
 	
+	@Override
 	public List<Reserva> getReservasAula(Aula aula) {
-		List<Reserva> reservasAula=modelo.getReservasAula(aula);
+		List<Reserva> reservasAula=Imodelo.getReservasAula(aula);
 		return reservasAula;
 	}
 	
+	@Override
 	public List<Reserva> getReservasProfesor(Profesor profesor) {
-		List<Reserva> reservasProfesor=modelo.getReservasProfesor(profesor);
+		List<Reserva> reservasProfesor=Imodelo.getReservasProfesor(profesor);
 		return reservasProfesor;
 	}
 	
+	@Override
 	public List<Reserva> getReservasPermanencia(Permanencia permanencia) {
-		List<Reserva> reservasPermanencia=modelo.getReservasPermanencia(permanencia);
+		List<Reserva> reservasPermanencia=Imodelo.getReservasPermanencia(permanencia);
 		return reservasPermanencia;
 	}
 	
+	@Override
 	public boolean consultarDisponibilidad(Aula aula, Permanencia permanencia) {
-		boolean disponibilidad=modelo.consultarDisponibilidad(aula, permanencia);
+		boolean disponibilidad=Imodelo.consultarDisponibilidad(aula, permanencia);
 		return disponibilidad;
 	}
 	

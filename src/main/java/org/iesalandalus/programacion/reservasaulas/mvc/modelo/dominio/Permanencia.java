@@ -48,7 +48,7 @@ public abstract class Permanencia {
 	}
 	
 	
-//	public abstract int compareTo(Permanencia p);
+	public abstract int compareTo(Permanencia p);
 	
 	
 	

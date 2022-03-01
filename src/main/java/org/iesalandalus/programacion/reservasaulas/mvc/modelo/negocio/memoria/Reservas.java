@@ -57,13 +57,15 @@ public class Reservas implements IReservas {
 		while (iterador.hasNext()) {
 			copiaProfunda.add(new Reserva(iterador.next()));
 		}
-//		Comparator<Reserva> comparador=Comparator.comparing(Reserva::getPermanencia,
-//				(s1,s2) -> {
-//					return s1.compareTo(s2);
-//				});
-//		
-//		
-//		Arrays.sort(copiaProfunda, comparador);
+		Comparator<Reserva> comparador=Comparator.comparing(Reserva::getAula,
+				(s1,s2) -> {
+					return s1.compareTo(s2);
+				}).thenComparing(Reserva::getPermanencia,
+				(s1,s2) -> {
+					return s1.compareTo(s2);
+				});
+		Collections.sort(copiaProfunda, comparador);
+		
 		return copiaProfunda;
 	}
 
@@ -96,11 +98,10 @@ public class Reservas implements IReservas {
 	public void borrar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
 			throw new NullPointerException("ERROR: No se puede borrar una reserva nula.");
-		} 
-		else if (!esMesSiguienteOPosterior(reserva)) {
-			throw new OperationNotSupportedException("ERROR: Sólo se pueden anular reservas para el mes que viene o posteriores.");
-		}
-		else if (buscar(reserva) == null) {
+		} else if (!esMesSiguienteOPosterior(reserva)) {
+			throw new OperationNotSupportedException(
+					"ERROR: Sólo se pueden anular reservas para el mes que viene o posteriores.");
+		} else if (buscar(reserva) == null) {
 			throw new OperationNotSupportedException("ERROR: No existe ninguna reserva igual.");
 		} else {
 			coleccionReservas.remove(coleccionReservas.indexOf(reserva));
@@ -111,7 +112,7 @@ public class Reservas implements IReservas {
 	@Override
 	public List<String> representar() {
 		List<String> representacion = new ArrayList<>();
-		Iterator<Reserva> iterador = coleccionReservas.iterator();
+		Iterator<Reserva> iterador = getReservas().iterator();
 		while (iterador.hasNext()) {
 			representacion.add(iterador.next().toString());
 		}
@@ -126,8 +127,8 @@ public class Reservas implements IReservas {
 		if (profesor == null) {
 			throw new NullPointerException("ERROR: El profesor no puede ser nulo.");
 		}
-		List<Reserva> listaProfesor = new ArrayList<>();
-		Iterator<Reserva> iterador = coleccionReservas.iterator();
+		List<Reserva> listaProfesor = new ArrayList<>();		
+		Iterator<Reserva> iterador = getReservas().iterator();
 		while (iterador.hasNext()) {
 			Reserva auxiliar = iterador.next();
 			if (profesor.equals(auxiliar.getProfesor())) {
@@ -146,7 +147,14 @@ public class Reservas implements IReservas {
 			throw new NullPointerException("ERROR: El aula no puede ser nula.");
 		}
 		List<Reserva> listaAula = new ArrayList<>();
-		Iterator<Reserva> iterador = coleccionReservas.iterator();
+		
+//		Comparator<Reserva> comparador=Comparator.comparing(Reserva::getPermanencia,
+//		(s1,s2) -> {
+//			return s1.compareTo(s2);
+//		});
+//		Collections.sort(coleccionReservas, comparador);
+		
+		Iterator<Reserva> iterador = getReservas().iterator();
 		while (iterador.hasNext()) {
 			Reserva auxiliar = iterador.next();
 			if (aula.equals(auxiliar.getAula())) {
@@ -162,13 +170,13 @@ public class Reservas implements IReservas {
 	@Override
 	public List<Reserva> getReservasPermanencia(Permanencia permanencia) {
 		if (permanencia == null) {
-			throw new NullPointerException("ERROR: No se puede anula una reserva nula.");
+			throw new NullPointerException("ERROR: No se puede consultar la disponibilidad de una permanencia nula.");
 		}
 		List<Reserva> listaPermanencia = new ArrayList<>();
-		Iterator<Reserva> iterador = coleccionReservas.iterator();
+		Iterator<Reserva> iterador = getReservas().iterator();
 		while (iterador.hasNext()) {
 			Reserva auxiliar = iterador.next();
-			if (permanencia.equals(auxiliar.getPermanencia())) {
+			if (permanencia.getDia().isEqual(auxiliar.getPermanencia().getDia())) {
 				listaPermanencia.add(new Reserva(auxiliar));
 			}
 		}
@@ -189,8 +197,21 @@ public class Reservas implements IReservas {
 		Iterator<Reserva> iterador = coleccionReservas.iterator();
 		while (iterador.hasNext()) {
 			Reserva auxiliar = iterador.next();
-			if (permanencia.equals(auxiliar.getPermanencia()) && aula.equals(auxiliar.getAula())) {
+			if (!esMesSiguienteOPosterior(Reserva.getReservaFicticia(aula, permanencia))) {
 				disponible = false;
+			} else if (aula.equals(auxiliar.getAula()) && permanencia.getDia().equals(auxiliar.getPermanencia().getDia())) {
+				if ((permanencia instanceof PermanenciaPorHora && auxiliar.getPermanencia() instanceof PermanenciaPorTramo)
+						|| (permanencia instanceof PermanenciaPorTramo && auxiliar.getPermanencia() instanceof PermanenciaPorHora)) {
+					disponible = false;
+				} else if (permanencia instanceof PermanenciaPorHora && auxiliar.getPermanencia() instanceof PermanenciaPorHora) {
+					if (((PermanenciaPorHora) permanencia).getHora().equals(((PermanenciaPorHora) auxiliar.getPermanencia()).getHora())) {
+						disponible = false;
+					}
+				} else if (permanencia instanceof PermanenciaPorTramo&& auxiliar.getPermanencia() instanceof PermanenciaPorTramo) {
+					if (((PermanenciaPorTramo) permanencia).getTramo().equals(((PermanenciaPorTramo) auxiliar.getPermanencia()).getTramo())) {
+						disponible = false;
+					}
+				}
 			}
 		}
 		return disponible;
@@ -231,8 +252,10 @@ public class Reservas implements IReservas {
 		return reservasMes;
 	}
 
-	// Método que recibe un Aula y un LocalDate como parámetros. Valida null y luego crea un iterador que guarda en una variable auxiliar la reserva que
-	// está iterando. Si el aula y la fecha del auxiliar, extraídos con los métodos adecuados, coinciden con las de los parámetros, hace una copia del
+	// Método que recibe un Aula y un LocalDate como parámetros. Valida null y luego
+	// crea un iterador que guarda en una variable auxiliar la reserva que
+	// está iterando. Si el aula y la fecha del auxiliar, extraídos con los métodos
+	// adecuados, coinciden con las de los parámetros, hace una copia del
 	// auxiliar y lo retorna. Si no, retorna null
 	@Override
 	public Reserva getReservaAulaDia(Aula aula, LocalDate fecha) {
@@ -255,44 +278,42 @@ public class Reservas implements IReservas {
 		return reserva.getPuntos();
 	}
 
-	// Método insertar, que a un Aula dada comprueba si es nullo y si no, recorre coleccionAulas buscando alguna coincidencia. De haberla, nos
-	// retorna una excepción avisándonos del aula duplicada y si no, inserta una copia del Aula pasada como parámetro
+	// Método insertar, que a un Aula dada comprueba si es nullo y si no, recorre
+	// coleccionAulas buscando alguna coincidencia. De haberla, nos
+	// retorna una excepción avisándonos del aula duplicada y si no, inserta una
+	// copia del Aula pasada como parámetro
 	@Override
 	public void insertar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
 			throw new NullPointerException("ERROR: No se puede insertar una reserva nula.");
 		}
 		Reserva reservaDia = getReservaAulaDia(reserva.getAula(), reserva.getPermanencia().getDia());
-		List<Reserva> reservasProfesor = getReservasProfesorMes(reserva.getProfesor(),reserva.getPermanencia().getDia());
+		List<Reserva> reservasProfesor = getReservasProfesorMes(reserva.getProfesor(),
+				reserva.getPermanencia().getDia());
 		float puntosGastados = 0;
 		for (Reserva r : reservasProfesor) {
 			puntosGastados = puntosGastados + r.getPuntos();
 		}
 		if (!esMesSiguienteOPosterior(reserva)) {
-			throw new OperationNotSupportedException("ERROR: Sólo se pueden hacer reservas para el mes que viene o posteriores.");
-		} 
-		else if (puntosGastados + getPuntosGastadosReserva(reserva) > MAX_PUNTOS_PROFESOR_MES) {
-			throw new OperationNotSupportedException("ERROR: Esta reserva excede los puntos máximos por mes para dicho profesor.");
-		}
-		else if (reservaDia!=null) {
-			if ((reservaDia.getPermanencia() instanceof PermanenciaPorTramo && reserva.getPermanencia() instanceof PermanenciaPorHora) ||
-					(reservaDia.getPermanencia() instanceof PermanenciaPorHora && reserva.getPermanencia() instanceof PermanenciaPorTramo)) {
-				throw new OperationNotSupportedException("ERROR: Ya se ha realizado una reserva de otro tipo de permanencia para este día.");
+			throw new OperationNotSupportedException(
+					"ERROR: Sólo se pueden hacer reservas para el mes que viene o posteriores.");
+		} else if (puntosGastados + getPuntosGastadosReserva(reserva) > MAX_PUNTOS_PROFESOR_MES) {
+			throw new OperationNotSupportedException(
+					"ERROR: Esta reserva excede los puntos máximos por mes para dicho profesor.");
+		} else if (reservaDia != null) {
+			if ((reservaDia.getPermanencia() instanceof PermanenciaPorTramo
+					&& reserva.getPermanencia() instanceof PermanenciaPorHora)
+					|| (reservaDia.getPermanencia() instanceof PermanenciaPorHora
+							&& reserva.getPermanencia() instanceof PermanenciaPorTramo)) {
+				throw new OperationNotSupportedException(
+						"ERROR: Ya se ha realizado una reserva de otro tipo de permanencia para este día.");
 			}
 		}
 		if (buscar(reserva) == null) {
 			coleccionReservas.add(new Reserva(reserva));
-		}
-		else {
+		} else {
 			throw new OperationNotSupportedException("ERROR: Ya existe una reserva igual.");
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -1,6 +1,9 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,7 +12,7 @@ import javax.naming.OperationNotSupportedException;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IAulas;
 
-public class Aulas implements IAulas {
+public class Aulas implements IAulas{
 	List<Aula> coleccionAulas;
 
 //Este getter devuelve una copia profunda mediante un método específico para ello, para evitar aliasing
@@ -42,6 +45,10 @@ public class Aulas implements IAulas {
 //	Método que crea una copia profunda del arraylist y lo devuelve para así evitar aliasing.
 	private List<Aula> copiaProfundaAulas(List<Aula> listaAulas) {
 		List<Aula> copiaProfunda = new ArrayList<>();
+		
+		Comparator<Aula> comparador=Comparator.comparing(Aula::getNombre);
+		Collections.sort(coleccionAulas, comparador);
+		
 		Iterator<Aula> iterador = listaAulas.iterator();
 		while (iterador.hasNext()) {
 			copiaProfunda.add(new Aula(iterador.next()));
@@ -104,6 +111,12 @@ public class Aulas implements IAulas {
 	@Override
 	public List<String> representar() {
 		List<String> representacion=new ArrayList<>();
+
+//		Comparator<Aula> comparador=Comparator.comparing(Aula::getNombre,
+//		(s1,s2) -> {
+//			return s1.compareTo(s2);
+//		});
+
 		Iterator<Aula> iterador=coleccionAulas.iterator();
 		while (iterador.hasNext()) {
 			representacion.add(iterador.next().toString());

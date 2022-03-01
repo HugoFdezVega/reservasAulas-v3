@@ -6,15 +6,16 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
-import org.iesalandalus.programacion.reservasaulas.mvc.controlador.Controlador;
+import org.iesalandalus.programacion.reservasaulas.mvc.controlador.IControlador;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.PermanenciaPorTramo;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Tramo;
 
 public class Vista implements IVista {
-	Controlador controlador;
+	IControlador Icontrolador;
 
 	private final static String ERROR = "No existen reservas para el parámetro proporcionado";
 	private final static String NOMBRE_VALIDO = "Manolo";
@@ -28,8 +29,8 @@ public class Vista implements IVista {
 
 //Método que setea el controlador una vez se instancie
 	@Override
-	public void setControlador(Controlador controlador) {
-		this.controlador = controlador;
+	public void setControlador(IControlador controlador) {
+		this.Icontrolador = controlador;
 	}
 
 //Método comenzar, que muestra el menú, nos da a elegir una opción, pasa dicha opción por el método getOpcionSegunOrdinal para validar que el ordenal
@@ -53,14 +54,14 @@ public class Vista implements IVista {
 	@Override
 	public void salir() {
 		System.out.println("¡Hasta otra!");
-		controlador.terminar();
+		Icontrolador.terminar();
 	}
 
 //Método que intenta llamar al método homónimo del controlador pasándo como parámetro el método adecuado de la consola. Captura todos los errores posibles,
 //los muestra y se queda dentro del bucle hasta que no existen. Luego nos da un mensaje de realización correcta.
 	public void insertarAula() {
 		try {
-			controlador.insertarAula(Consola.leerAula());
+			Icontrolador.insertarAula(Consola.leerAula());
 			System.out.println("Aula insertada correctamente.");
 		} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 			System.out.println(e.getMessage());
@@ -71,12 +72,12 @@ public class Vista implements IVista {
 //Método que intenta llamar al método homónimo del controlador pasándo como parámetro el método adecuado de la consola. Captura todos los errores posibles,
 //los muestra y se queda dentro del bucle hasta que no existen. Luego nos da un mensaje de realización correcta.
 	public void borrarAula() {
-		List<String> listaAulas = controlador.representarAulas();
+		List<String> listaAulas = Icontrolador.representarAulas();
 		if (listaAulas == null) {
 			System.out.println("No existen aulas que borrar");
 		} else {
 			try {
-				controlador.borrarAula(Consola.leerAula());
+				Icontrolador.borrarAula(Consola.leerAulaFicticia());
 				System.out.println("Aula borrada correctamente.");
 			} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 				System.out.println(e.getMessage());
@@ -89,12 +90,12 @@ public class Vista implements IVista {
 //consecuencia. Si el aula existe, la muestra con su .toString
 	public void buscarAula() {
 		Aula aula = null;
-		List<String> listaAulas = controlador.representarAulas();
+		List<String> listaAulas = Icontrolador.representarAulas();
 		if (listaAulas == null) {
 			System.out.println("No existen aulas que buscar");
 		} else {
 			try {
-				aula = controlador.buscarAula(Consola.leerAula());
+				aula = Icontrolador.buscarAula(Consola.leerAulaFicticia());
 			} catch (NullPointerException | IllegalArgumentException e) {
 				System.out.println(e.getMessage());
 			}
@@ -111,18 +112,13 @@ public class Vista implements IVista {
 	public void listarAulas() {
 		List<String> listaAulas = null;
 		try {
-			listaAulas = controlador.representarAulas();
+			listaAulas = Icontrolador.representarAulas();
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
 		if (listaAulas == null) {
 			System.out.println("No hay aulas que mostrar");
 		} else {
-//			for (String r : listaAulas) {
-//				if (r != null) {
-//					System.out.println(r.toString());
-//				}
-//			}
 			Iterator<String> iterador = listaAulas.iterator();
 			while (iterador.hasNext()) {
 				System.out.println(iterador.next().toString());
@@ -134,7 +130,7 @@ public class Vista implements IVista {
 //los muestra y se queda dentro del bucle hasta que no existen. Luego nos da un mensaje de realización correcta.
 	public void insertarProfesor() {
 		try {
-			controlador.insertarProfesor(Consola.leerProfesor());
+			Icontrolador.insertarProfesor(Consola.leerProfesor());
 			System.out.println("Profesor insertado correctamente.");
 		} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 			System.out.println(e.getMessage());
@@ -144,13 +140,13 @@ public class Vista implements IVista {
 //Método que intenta llamar al método homónimo del controlador pasándo como parámetro el método adecuado de la consola. Captura todos los errores posibles,
 //los muestra y se queda dentro del bucle hasta que no existen. Luego nos da un mensaje de realización correcta.
 	public void borrarProfesor() {
-		List<String> listaProfesores = controlador.representarProfesores();
+		List<String> listaProfesores = Icontrolador.representarProfesores();
 		if (listaProfesores == null) {
 			System.out.println("No existen profesores que borrar");
 		} else {
 			try {
-				Profesor profesorABorrar = new Profesor(Consola.leerNombreProfesor(), CORREO_VALIDO);
-				controlador.borrarProfesor(profesorABorrar);
+				Profesor profesorABorrar = new Profesor(Consola.leerProfesorFicticio());
+				Icontrolador.borrarProfesor(profesorABorrar);
 				System.out.println("Profesor borrado correctamente.");
 			} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 				System.out.println(e.getMessage());
@@ -163,13 +159,13 @@ public class Vista implements IVista {
 //consecuencia. Si el aula existe, la muestra con su .toString
 	public void buscarProfesor() {
 		Profesor profesor = null;
-		List<String> listaProfesores = controlador.representarProfesores();
+		List<String> listaProfesores = Icontrolador.representarProfesores();
 		if (listaProfesores == null) {
 			System.out.println("No existen profesores que buscar");
 		} else {
 			try {
-				Profesor profesorABuscar = new Profesor(Consola.leerNombreProfesor(), CORREO_VALIDO);
-				profesor = controlador.buscarProfesor(profesorABuscar);
+				Profesor profesorABuscar = new Profesor(Consola.leerProfesorFicticio());
+				profesor = Icontrolador.buscarProfesor(profesorABuscar);
 			} catch (NullPointerException | IllegalArgumentException e) {
 				System.out.println(e.getMessage());
 			}
@@ -186,7 +182,7 @@ public class Vista implements IVista {
 	public void listarProfesores() {
 		List<String> listaProfesores = null;
 		try {
-			listaProfesores = controlador.representarProfesores();
+			listaProfesores = Icontrolador.representarProfesores();
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
@@ -207,14 +203,17 @@ public class Vista implements IVista {
 		Reserva reservaARealizar = null;
 		try {
 			reservaARealizar = Consola.leerReserva();
-			if (controlador.buscarProfesor(reservaARealizar.getProfesor()) == null) {
+			if (Icontrolador.buscarProfesor(reservaARealizar.getProfesor()) == null) {
 				System.out.println("ERROR: El profesor introducido no existe. Por favor, creélo antes de intentar realizar una reserva con él.");
 			} 
-			else if (controlador.buscarAula(reservaARealizar.getAula()) == null) {
+			else if (Icontrolador.buscarAula(reservaARealizar.getAula()) == null) {
 				System.out.println("ERROR: El aula introducida no existe. Por favor, creéla antes de intentar realizar una reserva con ella.");
 			} 
 			else {
-				controlador.realizarReserva(reservaARealizar);
+				Profesor profesor= new Profesor(Icontrolador.buscarProfesor(reservaARealizar.getProfesor()));
+				Aula aula= new Aula(Icontrolador.buscarAula(reservaARealizar.getAula()));
+				Reserva reservaFinal=new Reserva (profesor,aula,reservaARealizar.getPermanencia());
+				Icontrolador.realizarReserva(reservaFinal);
 				System.out.println("Reserva realizada correctamente.");
 
 			}
@@ -229,13 +228,13 @@ public class Vista implements IVista {
 //devolvemos un mensaje de realización correcta.
 	public void anularReserva() {
 		Reserva reserva = null;
-		List<String> listaReservas = controlador.representarReservas();
+		List<String> listaReservas = Icontrolador.representarReservas();
 		if (listaReservas == null) {
 			System.out.println("No existen reservas que borrar");
 		} else {
 			try {
 				reserva = Consola.leerReservaFicticia();
-				controlador.anularReserva(reserva);
+				Icontrolador.anularReserva(reserva);
 				System.out.println("Reserva anulada correctamente.");
 			} catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
 				System.out.println(e.getMessage());
@@ -246,27 +245,53 @@ public class Vista implements IVista {
 //Método que crea un array String y ejecuta el método homónimo del controlador. Captura todos los errores posibles y los muestra de existir. Si el retorno es
 //nulo (no existe), muestra un mensaje en consecuencia. Si no, recorre el array mostrando los resultados con el .toString de la clase
 	public void listarReservas() {
-		List<String> listaReservas = null;
+//		List<String> listaReservas = null;
+//		try {
+//			listaReservas = Icontrolador.representarReservas();
+//		} catch (NullPointerException | IllegalArgumentException e) {
+//			System.out.println(e.getMessage());
+//		}
+//		if (listaReservas == null) {
+//			System.out.println("No hay reservas que mostrar");
+//		} else {
+//			Iterator<String> iterador = listaReservas.iterator();
+//			while (iterador.hasNext()) {
+//				System.out.println(iterador.next().toString());
+//			}
+//		}
+		List<Reserva> listaReservas = null;
 		try {
-			listaReservas = controlador.representarReservas();
+			Permanencia permanencia=null;
+			permanencia=new PermanenciaPorTramo(Consola.leerDia(),Tramo.TARDE);
+			listaReservas = Icontrolador.getReservasPermanencia(permanencia);	
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
 		if (listaReservas == null) {
-			System.out.println("No hay reservas que mostrar");
+			System.out.println(ERROR);
 		} else {
-			Iterator<String> iterador = listaReservas.iterator();
+			Iterator<Reserva> iterador = listaReservas.iterator();
 			while (iterador.hasNext()) {
 				System.out.println(iterador.next().toString());
 			}
 		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 //Método similar a listaReservas pero solo para un parámetro dado, que obtendremos mediante el método adecuado de la consola
 	public void listarReservasAula() {
 		List<Reserva> listaReservasAula = null;
 		try {
-			listaReservasAula = controlador.getReservasAula(Consola.leerAula());
+			listaReservasAula = Icontrolador.getReservasAula(Consola.leerAulaFicticia());
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
@@ -284,8 +309,7 @@ public class Vista implements IVista {
 	public void listarReservasProfesor() {
 		List<Reserva> listaReservasProfesor = null;
 		try {
-			Profesor profesorABuscar = new Profesor(Consola.leerNombreProfesor(), CORREO_VALIDO);
-			listaReservasProfesor = controlador.getReservasProfesor(profesorABuscar);
+			listaReservasProfesor = Icontrolador.getReservasProfesor(Consola.leerProfesorFicticio());
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
@@ -299,8 +323,8 @@ public class Vista implements IVista {
 		}
 	}
 
-//Método que pide mediante consola un tramo y un día para crear una permanencia, luego pide un aula mediante consola y pasa el aula y la permanencia como
-//parámetros para el método homónimo del controlador, que devolverá true si el aula está disponible o false de lo contrario. Se retornan mensajes adecuados.
+//Método que recibe una permanencia y un aula, y verifica si dicha aula está disponible para ese tipo de permamencia y esa fecha, discriminando por
+//tramos u horas según convenga. Verifica el null del aula y que la permanencia introducida sea posterior al mes presente
 	public void consultarDisponibilidad() {
 		boolean disponible = true;
 		Permanencia permanencia = null;
@@ -308,16 +332,17 @@ public class Vista implements IVista {
 		try {
 			permanencia = Consola.leerPermanencia();
 			aula = Consola.leerAulaFicticia();
-			disponible = controlador.consultarDisponibilidad(aula, permanencia);
+			disponible = Icontrolador.consultarDisponibilidad(aula, permanencia);
 		} catch (NullPointerException | IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
-		if (controlador.buscarAula(aula) == null) {
+		if (Icontrolador.buscarAula(aula) == null) {
 			System.out.println("El aula introducida no existe");
-		} else if (disponible == true) {
-			System.out.println("El aula se encuentra disponible para el tramo y día introducidos");
+		} 
+		else if (disponible == true) {
+			System.out.println("El aula se encuentra disponible para la permanencia y día introducidos.");
 		} else {
-			System.out.println("El aula NO se encuentra disponible para el tramo y día introducidos");
+			System.out.println("El aula NO se encuentra disponible para la permanencia y día introducidos.");
 		}
 	}
 

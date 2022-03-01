@@ -84,7 +84,11 @@ public class Aula {
 		return "nombre=" + getNombre() + ", puestos=" + getPuestos();
 	}
 	
-	
+	public int compareTo(Aula aula) {
+		int resultado=0;
+		resultado=this.getNombre().compareTo(aula.getNombre());
+		return resultado;
+	}
 	
 	
 	

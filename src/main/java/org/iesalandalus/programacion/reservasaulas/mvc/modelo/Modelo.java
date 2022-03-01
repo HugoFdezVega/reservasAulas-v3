@@ -9,20 +9,23 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Permanencia;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IAulas;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesores;
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IReservas;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Aulas;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Profesores;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Reservas;
 
 public class Modelo implements IModelo {
-	Aulas aulas;
-	Profesores profesores;
-	Reservas reservas;
+	IAulas aulas;
+	IProfesores profesores;
+	IReservas reservas;
 	
 //Constructor que crea los objetos anteriormente mencionados
 	public Modelo(){
-		aulas=new Aulas();
-		profesores=new Profesores();
-		reservas=new Reservas();
+		aulas=FactoriaFuenteDatos.MEMORIA.crear().crearAulas();
+		profesores=FactoriaFuenteDatos.MEMORIA.crear().crearProfesores();
+		reservas=FactoriaFuenteDatos.MEMORIA.crear().crearReservas();;
 	}
 	
 	@Override
@@ -41,14 +44,6 @@ public class Modelo implements IModelo {
 	public List<String> representarAulas() {
 		List<String> listaAulas=aulas.representar();
 		boolean vacio=true;
-//		for(String s:listaAulas) {
-//			if(s!=null) {
-//				vacio=false;
-//			}
-//		}
-//		if(vacio==true) {
-//			return null;
-//		}
 		Iterator<String> iterador=listaAulas.iterator();
 		while (iterador.hasNext()) {
 			String auxiliar=iterador.next();
