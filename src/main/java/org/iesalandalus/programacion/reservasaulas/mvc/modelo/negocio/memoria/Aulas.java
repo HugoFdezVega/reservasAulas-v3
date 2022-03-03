@@ -1,7 +1,6 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -13,7 +12,7 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IAulas;
 
 public class Aulas implements IAulas{
-	List<Aula> coleccionAulas;
+	private List<Aula> coleccionAulas;
 
 //Este getter devuelve una copia profunda mediante un método específico para ello, para evitar aliasing
 	@Override

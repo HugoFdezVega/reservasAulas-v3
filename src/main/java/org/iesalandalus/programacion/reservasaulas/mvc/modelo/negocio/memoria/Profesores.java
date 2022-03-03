@@ -8,12 +8,11 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesores;
 
 public class Profesores implements IProfesores {
-	List<Profesor> coleccionProfesores;
+	private List<Profesor> coleccionProfesores;
 
 //Este getter devuelve una copia profunda mediante un método específico para ello, para evitar aliasing
 	@Override
