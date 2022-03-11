@@ -70,5 +70,9 @@ public interface IModelo {
 
 	//Método que correrá el método homónimo de Reservas y devolverá true si está disponible y false de lo contrario
 	boolean consultarDisponibilidad(Aula aula, Permanencia permanencia);
+	
+	public void comenzar();
+	
+	public void terminar();
 
 }

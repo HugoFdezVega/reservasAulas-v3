@@ -1,12 +1,9 @@
-package org.iesalandalus.programacion.reservasaulas.mvc.modelo;
+package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria;
 
+import org.iesalandalus.programacion.reservasaulas.mvc.modelo.IFuenteDatos;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IAulas;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesores;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IReservas;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Aulas;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.IFuenteDatos;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Profesores;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Reservas;
 
 public class FactoriaFuenteDatosMemoria implements IFuenteDatos {
 	//Constructor vacío

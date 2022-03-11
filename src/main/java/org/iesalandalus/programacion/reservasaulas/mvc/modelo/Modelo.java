@@ -12,9 +12,6 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IAulas;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesores;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IReservas;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Aulas;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Profesores;
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.memoria.Reservas;
 
 public class Modelo implements IModelo {
 	IAulas aulas;
@@ -22,10 +19,16 @@ public class Modelo implements IModelo {
 	IReservas reservas;
 	
 //Constructor que crea los objetos anteriormente mencionados
-	public Modelo(){
-		aulas=FactoriaFuenteDatos.MEMORIA.crear().crearAulas();
-		profesores=FactoriaFuenteDatos.MEMORIA.crear().crearProfesores();
-		reservas=FactoriaFuenteDatos.MEMORIA.crear().crearReservas();;
+//	public Modelo(){
+//		aulas=FactoriaFuenteDatos.FICHEROS.crear().crearAulas();
+//		profesores=FactoriaFuenteDatos.FICHEROS.crear().crearProfesores();
+//		reservas=FactoriaFuenteDatos.FICHEROS.crear().crearReservas();;
+//	}
+	
+	public Modelo(IFuenteDatos fuenteDatos) {
+		aulas=fuenteDatos.crearAulas();
+		profesores=fuenteDatos.crearProfesores();
+		reservas=fuenteDatos.crearReservas();
 	}
 	
 	@Override
@@ -241,8 +244,15 @@ public class Modelo implements IModelo {
 	}
 	
 	
+	@Override
+	public void comenzar() {
+		aulas.comenzar();
+	}
 	
-	
+	@Override
+	public void terminar() {
+		aulas.terminar();
+	}
 	
 	
 	

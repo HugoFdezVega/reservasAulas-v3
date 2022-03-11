@@ -33,12 +33,15 @@ public class Controlador implements IControlador {
 //Método comenzar, que corre el método homónimo de la Vista
 	@Override
 	public void comenzar() {
+		Imodelo.comenzar();
 		Ivista.comenzar();
+
 	}
 	
 //Método terminar, que simplemente corre el método exit y cierra la ejecución
 	@Override
 	public void terminar() {
+		Imodelo.terminar();
 		System.exit(0);
 	}
 	
