@@ -314,5 +314,15 @@ public class Reservas implements IReservas {
 			throw new OperationNotSupportedException("ERROR: Ya existe una reserva igual.");
 		}
 	}
+	
+	@Override
+	public void comenzar() {
+		
+	}
+	
+	@Override
+	public void terminar() {
+		
+	}
 
 }

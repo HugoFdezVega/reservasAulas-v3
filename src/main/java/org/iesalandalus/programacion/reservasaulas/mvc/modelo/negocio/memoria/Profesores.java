@@ -114,4 +114,16 @@ public class Profesores implements IProfesores {
 		}
 		return representacion;
 	}
+	
+	@Override
+	public void comenzar() {
+		
+	}
+	
+	@Override
+	public void terminar() {
+		
+	}
+	
+	
 }

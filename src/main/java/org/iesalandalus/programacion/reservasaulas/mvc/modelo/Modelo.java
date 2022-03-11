@@ -247,11 +247,15 @@ public class Modelo implements IModelo {
 	@Override
 	public void comenzar() {
 		aulas.comenzar();
+		profesores.comenzar();
+		reservas.comenzar();
 	}
 	
 	@Override
 	public void terminar() {
 		aulas.terminar();
+		profesores.terminar();
+		reservas.terminar();
 	}
 	
 	

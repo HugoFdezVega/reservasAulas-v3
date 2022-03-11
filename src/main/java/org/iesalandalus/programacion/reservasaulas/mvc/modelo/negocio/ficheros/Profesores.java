@@ -15,12 +15,11 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
-import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesores;
 
 public class Profesores implements IProfesores {
-	private static final String NOMBRE_FICHERO_PROFESORES="datos/profesores.dat";
+	private static final String NOMBRE_FICHERO_PROFESORES = "datos/profesores.dat";
 	private List<Profesor> coleccionProfesores;
 
 //Este getter devuelve una copia profunda mediante un método específico para ello, para evitar aliasing
@@ -53,10 +52,10 @@ public class Profesores implements IProfesores {
 //	Método que crea una copia profunda del arraylist y lo devuelve para así evitar aliasing.
 	private List<Profesor> copiaProfundaProfesores(List<Profesor> listaProfesores) {
 		List<Profesor> copiaProfunda = new ArrayList<>();
-		
-		Comparator<Profesor> comparador=Comparator.comparing(Profesor::getCorreo);
+
+		Comparator<Profesor> comparador = Comparator.comparing(Profesor::getCorreo);
 		Collections.sort(coleccionProfesores, comparador);
-		
+
 		Iterator<Profesor> iterador = listaProfesores.iterator();
 		while (iterador.hasNext()) {
 			copiaProfunda.add(new Profesor(iterador.next()));
@@ -124,14 +123,14 @@ public class Profesores implements IProfesores {
 		return representacion;
 	}
 
-	//Crea un archivo con la ruta pasada, luego abre un stream binario y después otro para objetos y copia toda coleccionAulas en el archivo. Captura excepciones
-	//de haberlas
+	// Crea un archivo con la ruta pasada, luego abre un stream binario y después otro para objetos y copia toda coleccionAulas en el archivo. Captura
+	// excepciones de haberlas
 	private void escribir() {
-		File archivoProfesores=new File(NOMBRE_FICHERO_PROFESORES);
+		File archivoProfesores = new File(NOMBRE_FICHERO_PROFESORES);
 		try {
-			FileOutputStream fileOut=new FileOutputStream(archivoProfesores);
-			ObjectOutputStream dataOS=new ObjectOutputStream(fileOut);
-			for(Profesor p:coleccionProfesores) {
+			FileOutputStream fileOut = new FileOutputStream(archivoProfesores);
+			ObjectOutputStream dataOS = new ObjectOutputStream(fileOut);
+			for (Profesor p : coleccionProfesores) {
 				dataOS.writeObject(p);
 			}
 			dataOS.close();
@@ -141,64 +140,45 @@ public class Profesores implements IProfesores {
 			System.out.println("ERROR inesperado de Entrada/Salida");
 		}
 	}
-	
-	//Crea un archivo con la ruta pasada, comprueba si existe y si no lo crea, y después crea un stream binario y otro de objetos y lo recorre, insertando cada
-		//uno de los objetos que se encuentra. Cuando llega a 
-		private void leer() {
-			Profesor profesor=null;
-			File archivoProfesores=new File(NOMBRE_FICHERO_PROFESORES);
-			try {
-				if (!archivoProfesores.exists()) {
-					archivoProfesores.createNewFile();
-				} else {
-					FileInputStream fileIn = new FileInputStream(archivoProfesores);
-					ObjectInputStream dataIS=new ObjectInputStream(fileIn);
-					do {
-						profesor=(Profesor)dataIS.readObject();
-						if (profesor!=null) {
-							insertar(profesor);
-						}
-					} while (profesor!=null);
-					dataIS.close();
-				}
-			} catch (FileNotFoundException e) {
-				System.out.println("ERROR: No se pudo abrir el fichero de profesores");
-			} catch (IOException e) {
-//				System.out.println("ERROR inesperado de Entrada/Salida en lectura");
-			} catch (ClassNotFoundException e) {
-				System.out.println("ERROR: No se pudo encontrar la clase a leer");
-			} catch (OperationNotSupportedException e) {
-				System.out.println(e.getMessage());
+
+	// Crea un archivo con la ruta pasada, comprueba si existe y si no lo crea, y después crea un stream binario y otro de objetos y lo recorre, insertando
+	// cada uno de los objetos que se encuentra. Cuando llega a
+	private void leer() {
+		Profesor profesor = null;
+		File archivoProfesores = new File(NOMBRE_FICHERO_PROFESORES);
+		try {
+			if (!archivoProfesores.exists()) {
+				archivoProfesores.createNewFile();
+			} else {
+				FileInputStream fileIn = new FileInputStream(archivoProfesores);
+				ObjectInputStream dataIS = new ObjectInputStream(fileIn);
+				do {
+					profesor = (Profesor) dataIS.readObject();
+					if (profesor != null) {
+						insertar(profesor);
+					}
+				} while (profesor != null);
+				dataIS.close();
 			}
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: No se pudo abrir el fichero de profesores");
+		} catch (IOException e) {
+//				System.out.println("ERROR inesperado de Entrada/Salida en lectura");
+		} catch (ClassNotFoundException e) {
+			System.out.println("ERROR: No se pudo encontrar la clase a leer");
+		} catch (OperationNotSupportedException e) {
+			System.out.println(e.getMessage());
 		}
-		
-		@Override
-		public void comenzar() {
-			leer();
-		}
-		
-		@Override
-		public void terminar() {
-			escribir();
-		}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}
+
+	@Override
+	public void comenzar() {
+		leer();
+	}
+
+	@Override
+	public void terminar() {
+		escribir();
+	}
+
 }

@@ -1,5 +1,12 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.ficheros;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -20,6 +27,7 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IReservas;
 
 public class Reservas implements IReservas {
 	private final static float MAX_PUNTOS_PROFESOR_MES = 200;
+	private static final String NOMBRE_FICHERO_RESERVAS="datos/reservas.dat";
 	private List<Reserva> coleccionReservas;
 
 //Este getter devuelve una copia profunda mediante un método específico para ello, para evitar aliasing
@@ -315,4 +323,63 @@ public class Reservas implements IReservas {
 		}
 	}
 
+	//Crea un archivo con la ruta pasada, luego abre un stream binario y después otro para objetos y copia toda coleccionAulas en el archivo. Captura excepciones
+	//de haberlas
+	private void escribir() {
+		File archivoReservas=new File(NOMBRE_FICHERO_RESERVAS);
+		try {
+			FileOutputStream fileOut=new FileOutputStream(archivoReservas);
+			ObjectOutputStream dataOS=new ObjectOutputStream(fileOut);
+			for(Reserva r:coleccionReservas) {
+				dataOS.writeObject(r);
+			}
+			dataOS.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: No se pudo encontrar el fichero de reservas");
+		} catch (IOException e) {
+			System.out.println("ERROR inesperado de Entrada/Salida");
+		}
+	}
+	
+	//Crea un archivo con la ruta pasada, comprueba si existe y si no lo crea, y después crea un stream binario y otro de objetos y lo recorre, insertando cada
+	//uno de los objetos que se encuentra. Cuando llega a 
+	private void leer() {
+		Reserva reserva=null;
+		File archivoReservas=new File(NOMBRE_FICHERO_RESERVAS);
+		try {
+			if (!archivoReservas.exists()) {
+				archivoReservas.createNewFile();
+			} else {
+				FileInputStream fileIn = new FileInputStream(archivoReservas);
+				ObjectInputStream dataIS=new ObjectInputStream(fileIn);
+				do {
+					reserva=(Reserva)dataIS.readObject();
+					if (reserva!=null) {
+						insertar(reserva);
+					}
+				} while (reserva!=null);
+				dataIS.close();
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: No se pudo abrir el fichero de reservas");
+		} catch (IOException e) {
+//			System.out.println("ERROR inesperado de Entrada/Salida en lectura");
+		} catch (ClassNotFoundException e) {
+			System.out.println("ERROR: No se pudo encontrar la clase a leer");
+		} catch (OperationNotSupportedException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void comenzar() {
+		leer();
+	}
+	
+	@Override
+	public void terminar() {
+		escribir();
+	}
+	
+	
 }
