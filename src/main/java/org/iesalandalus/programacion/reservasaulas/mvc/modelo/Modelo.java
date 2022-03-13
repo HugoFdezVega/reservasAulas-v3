@@ -14,9 +14,9 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IProfesore
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio.IReservas;
 
 public class Modelo implements IModelo {
-	IAulas aulas;
-	IProfesores profesores;
-	IReservas reservas;
+	private IAulas aulas;
+	private IProfesores profesores;
+	private IReservas reservas;
 	
 //Constructor que crea los objetos anteriormente mencionados
 //	public Modelo(){

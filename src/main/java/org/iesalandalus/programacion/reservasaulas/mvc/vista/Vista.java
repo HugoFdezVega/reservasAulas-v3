@@ -1,6 +1,5 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.vista;
 
-import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Tramo;
 
 public class Vista implements IVista {
-	IControlador Icontrolador;
+	private IControlador Icontrolador;
 
 	private final static String ERROR = "No existen reservas para el parámetro proporcionado";
 	private final static String NOMBRE_VALIDO = "Manolo";

@@ -12,8 +12,8 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.mvc.vista.IVista;
 
 public class Controlador implements IControlador {
-	IModelo Imodelo;
-	IVista Ivista;
+	private IModelo Imodelo;
+	private IVista Ivista;
 	
 //Constructor del controlador, que toma como parámetros el Modelo y la Vista, comprueba nulos, y luego se asigna a sí mismo a la Vista
 //para que ésta sepa quién es el Controlador.
